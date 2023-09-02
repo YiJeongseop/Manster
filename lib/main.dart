@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:manster/app/modules/intro/intro_page.dart';
+
+import 'app/modules/intro/intro_page.dart';
+import 'app/modules/home/home_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,7 +22,8 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       getPages: [
-        GetPage(name: '/', page: () => const IntroPage())
+        GetPage(name: '/', page: () => const IntroPage()),
+        GetPage(name: '/home', page: () => const HomePage(), transition: Transition.size)
       ],
     );
   }
