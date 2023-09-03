@@ -3,16 +3,32 @@ import 'package:get/get.dart';
 
 class IntroController extends GetxController {
   var textProgress = 0.0.obs;
+  var imageNumber = 1.obs;
 
-  // Finish in 1 second
   void startTextAnimation() {
     Timer.periodic(
-      const Duration(milliseconds: 10),
+      const Duration(milliseconds: 12),
       (timer) {
         if (textProgress.value > 7) {
           timer.cancel();
+          Future.delayed(const Duration(milliseconds: 2000), () {
+            Get.offNamed("/home");
+          });
         } else {
-          textProgress.value += 0.07;
+          textProgress.value += 0.035;
+        }
+      },
+    );
+  }
+
+  void startRunning() {
+    Timer.periodic(
+      const Duration(milliseconds: 50),
+      (timer) {
+        if (imageNumber.value == 5) {
+          imageNumber.value = 1;
+        } else {
+          imageNumber.value++;
         }
       },
     );

@@ -16,53 +16,47 @@ class _IntroPageState extends State<IntroPage> {
   @override
   void initState() {
     introController.startTextAnimation();
+    introController.startRunning();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    introController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: const Color(0xFFFFFFFF),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Row(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset(
-                    'assets/images/icon.png',
-                    height: screenSize.height * 0.06,
-                  ),
-                  SizedBox(
-                    width: screenSize.width * 0.005,
-                  ),
                   Obx(
                     () => Text(
                       "Manster".substring(
                           0, (introController.textProgress.value).toInt()),
                       style: GoogleFonts.comingSoon(
-                          fontSize: screenSize.height * 0.07,
+                          fontSize: screenSize.height * 0.08,
                           fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                  Obx(
+                    () => Image.asset(
+                      'assets/images/run${introController.imageNumber}.png',
+                      height: screenSize.height * 0.06,
                     ),
                   ),
                 ],
               ),
-              TextButton(
-                onPressed: () {
-                  Get.toNamed('home');
-                },
-                child: Text(
-                  "Go HomePage",
-                  style: GoogleFonts.comingSoon(
-                      fontSize: screenSize.height * 0.06),
-                ),
-              )
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
