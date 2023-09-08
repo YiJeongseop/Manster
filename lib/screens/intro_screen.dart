@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:manster/app/modules/intro/intro_controller.dart';
+import 'package:manster/controllers/intro_controller.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class IntroPage extends StatefulWidget {
-  const IntroPage({Key? key}) : super(key: key);
+class IntroScreen extends StatefulWidget {
+  const IntroScreen({Key? key}) : super(key: key);
 
   @override
-  State<IntroPage> createState() => _IntroPageState();
+  State<IntroScreen> createState() => _IntroScreenState();
 }
 
-class _IntroPageState extends State<IntroPage> {
+class _IntroScreenState extends State<IntroScreen> {
   final IntroController introController = Get.put(IntroController());
 
   @override
@@ -28,7 +28,7 @@ class _IntroPageState extends State<IntroPage> {
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
+    final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -43,14 +43,14 @@ class _IntroPageState extends State<IntroPage> {
                       "Manster".substring(
                           0, (introController.textProgress.value).toInt()),
                       style: GoogleFonts.comingSoon(
-                          fontSize: screenSize.height * 0.08,
+                          fontSize: (screenWidth > 1080) ? screenWidth * 0.03 : 1080 * 0.03,
                           fontWeight: FontWeight.w600),
                     ),
                   ),
                   Obx(
                     () => Image.asset(
                       'assets/images/run${introController.imageNumber}.png',
-                      height: screenSize.height * 0.06,
+                      height: (screenWidth > 1080) ? screenWidth * 0.02 : 1080 * 0.02,
                     ),
                   ),
                 ],

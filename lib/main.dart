@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jikan_api/jikan_api.dart';
 
-import 'app/modules/intro/intro_page.dart';
-import 'app/modules/home/home_page.dart';
+import 'screens/intro_screen.dart';
+import 'screens/home_screen.dart';
+
+final jikan = Jikan();
 
 void main() {
   runApp(const MyApp());
@@ -11,19 +14,15 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Manster',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
       initialRoute: '/',
       getPages: [
-        GetPage(name: '/', page: () => const IntroPage()),
-        GetPage(name: '/home', page: () => const HomePage(), transition: Transition.fade)
+        GetPage(name: '/', page: () => const IntroScreen()),
+        GetPage(name: '/home', page: () => const HomeScreen(), transition: Transition.downToUp)
       ],
     );
   }

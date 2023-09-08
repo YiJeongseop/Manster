@@ -11,7 +11,7 @@ class IntroController extends GetxController {
       (timer) {
         if (textProgress.value > 7) {
           timer.cancel();
-          Future.delayed(const Duration(milliseconds: 2000), () {
+          Future.delayed(const Duration(milliseconds: 500), () {
             Get.offNamed("/home");
           });
         } else {
@@ -23,7 +23,7 @@ class IntroController extends GetxController {
 
   void startRunning() {
     Timer.periodic(
-      const Duration(milliseconds: 50),
+      const Duration(milliseconds: 40),
       (timer) {
         if (imageNumber.value == 5) {
           imageNumber.value = 1;
