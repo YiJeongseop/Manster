@@ -14,14 +14,14 @@ class CaptureButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     return Container(
-        padding: (screenWidth > 1080)
-            ? EdgeInsets.fromLTRB(
-            screenWidth * 0.01,
-            screenWidth * 0.01,
-            screenWidth * 0.01,
-            screenWidth * 0.03)
-            : const EdgeInsets.fromLTRB(1080 * 0.01,
-            1080 * 0.01, 1080 * 0.01, 1080 * 0.03),
+        // padding: (screenWidth > 1080)
+        //     ? EdgeInsets.fromLTRB(
+        //     screenWidth * 0.01,
+        //     screenWidth * 0.01,
+        //     screenWidth * 0.01,
+        //     screenWidth * 0.03)
+        //     : const EdgeInsets.fromLTRB(1080 * 0.01,
+        //     1080 * 0.01, 1080 * 0.01, 1080 * 0.03),
         child: ElevatedButton(
           onPressed: () {
             screenshotController.capture().then((Uint8List? image){

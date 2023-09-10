@@ -25,7 +25,7 @@ class _SizeButtonWidgetState extends State<SizeButtonWidget> {
       onPressed: () {
         (sizeText == "4x4")
             ? mangaController.setSize(4)
-            : mangaController.setSize(3);
+            : ((sizeText == "3x3") ? mangaController.setSize(3) : mangaController.setSize(2));
       },
       style: ButtonStyle(
         side: MaterialStateProperty.all(
@@ -48,7 +48,7 @@ class _SizeButtonWidgetState extends State<SizeButtonWidget> {
       child: Text(
         "  $sizeText  ",
         style: GoogleFonts.comingSoon(
-          fontSize: (screenWidth > 1080) ? screenWidth * 0.013 : 1080 * 0.013,
+          fontSize: (screenWidth > 1080) ? screenWidth * 0.015 : 1080 * 0.015,
           color: Colors.black,
         ),
       ),

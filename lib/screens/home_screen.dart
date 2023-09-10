@@ -261,16 +261,27 @@ class _HomeScreenState extends State<HomeScreen> {
                           border: Border.all(color: Colors.black, width: 2),
                         ),
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container(
-                              padding: (screenWidth > 1080)
-                                  ? EdgeInsets.fromLTRB(
-                                      screenWidth * 0.01,
-                                      screenWidth * 0.03,
-                                      screenWidth * 0.01,
-                                      screenWidth * 0.01)
-                                  : const EdgeInsets.fromLTRB(1080 * 0.01,
-                                      1080 * 0.03, 1080 * 0.01, 1080 * 0.01),
+                              child: SizeButtonWidget(
+                                sizeText: "2x2",
+                                mangaController: mangaController,
+                              ),
+                            ),
+                            SizedBox(
+                              height: (screenWidth > 1080)
+                                  ? screenWidth * 0.31 * 0.04
+                                  : 1080 * 0.31 * 0.04,),
+                            Container(
+                              // padding: (screenWidth > 1080)
+                              //     ? EdgeInsets.fromLTRB(
+                              //         screenWidth * 0.01,
+                              //         screenWidth * 0.03,
+                              //         screenWidth * 0.01,
+                              //         screenWidth * 0.01)
+                              //     : const EdgeInsets.fromLTRB(1080 * 0.01,
+                              //         1080 * 0.03, 1080 * 0.01, 1080 * 0.01),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
@@ -286,7 +297,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ],
                               ),
                             ),
-                            Expanded(child: Container()),
+                            SizedBox(
+                              height: (screenWidth > 1080)
+                                  ? screenWidth * 0.31 * 0.04
+                                  : 1080 * 0.31 * 0.04,),
                             CaptureButtonWidget(
                                 screenshotController: screenshotController),
                           ],
