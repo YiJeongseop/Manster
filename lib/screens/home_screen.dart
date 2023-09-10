@@ -69,8 +69,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       Container(
                         height: (screenWidth > 1080)
-                            ? screenWidth * 0.32 * 1.36
-                            : 1080 * 0.32 * 1.36,
+                            ? screenWidth * 0.31 * 1.36
+                            : 1080 * 0.31 * 1.36,
                         width: (screenWidth > 1080)
                             ? screenWidth * 0.15
                             : 1080 * 0.15,
@@ -112,9 +112,28 @@ class _HomeScreenState extends State<HomeScreen> {
                                 textInputAction: TextInputAction.go,
                                 // Enter key event
                                 onSubmitted: (value) async {
-                                  mangaController.mangaList.value =
-                                      await jikan.searchManga(
-                                          query: value, rawQuery: '&sfw');
+                                  if (titleSearchController.canSubmit) {
+                                    mangaController.mangaList.value =
+                                        await jikan.searchManga(
+                                            query: value, rawQuery: '&sfw');
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          'Please enter it in a few seconds later.',
+                                          textAlign: TextAlign.center,
+                                          style: GoogleFonts.comingSoon(
+                                            fontSize: (screenWidth > 1080)
+                                                ? screenWidth * 0.013
+                                                : 1080 * 0.013,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        duration: const Duration(seconds: 2),
+                                      ),
+                                    );
+                                  }
+                                  titleSearchController.changeCanSubmit();
                                 },
                               ),
                             ),
@@ -138,8 +157,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             const Divider(),
                             SizedBox(
                               height: (screenWidth > 1080)
-                                  ? screenWidth * 0.32 * 0.08
-                                  : 1080 * 0.32 * 0.08,
+                                  ? screenWidth * 0.31 * 0.08
+                                  : 1080 * 0.31 * 0.08,
                             )
                           ],
                         ),
@@ -149,15 +168,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Container(
                           color: const Color(0xFFD2D2D2),
                           height: (screenWidth > 1080)
-                              ? screenWidth * 0.32 * 1.36
-                              : 1080 * 0.32 * 1.36,
+                              ? screenWidth * 0.31 * 1.36
+                              : 1080 * 0.31 * 1.36,
                           width: (screenWidth > 1080)
-                              ? screenWidth * 0.32
-                              : 1080 * 0.32,
+                              ? screenWidth * 0.31
+                              : 1080 * 0.31,
                           child: GetBuilder<MangaController>(
                             builder: (_) => GridView.count(
                               shrinkWrap: true,
-                              crossAxisCount: mangaController.size, //3,
+                              crossAxisCount: mangaController.size,
                               childAspectRatio: 1 / 1.36,
                               children: List.generate(
                                 mangaController.size * mangaController.size,
@@ -198,7 +217,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       : Colors.transparent,
                                                   width: 2),
                                               color: Colors.white),
-                                          margin: const EdgeInsets.all(5.0),
+                                          margin: const EdgeInsets.all(2.5),
                                           child: mangaController
                                                       .gridImages[index] !=
                                                   null
@@ -227,8 +246,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       Container(
                         height: (screenWidth > 1080)
-                            ? screenWidth * 0.32 * 1.36
-                            : 1080 * 0.32 * 1.36,
+                            ? screenWidth * 0.31 * 1.36
+                            : 1080 * 0.31 * 1.36,
                         width: (screenWidth > 1080)
                             ? screenWidth * 0.15
                             : 1080 * 0.15,
@@ -268,8 +287,24 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             Expanded(child: Container()),
-                            CaptureButtonWidget(screenshotController: screenshotController),
+                            CaptureButtonWidget(
+                                screenshotController: screenshotController),
                           ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Create your favorite manga collection!",
+                        style: GoogleFonts.comingSoon(
+                          fontSize: (screenWidth > 1080)
+                              ? screenWidth * 0.01
+                              : 1080 * 0.01,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ],
