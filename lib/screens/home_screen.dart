@@ -3,8 +3,10 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:manster/controllers/manga_controller.dart';
 import 'package:manster/controllers/title_search_controller.dart';
+import 'package:manster/widgets/capture_button_widget.dart';
 import 'package:manster/widgets/manga_list_widget.dart';
 import 'package:manster/widgets/size_button_widget.dart';
+import 'package:screenshot/screenshot.dart';
 
 import '../main.dart';
 
@@ -19,6 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final TitleSearchController titleSearchController =
       Get.put(TitleSearchController());
   final MangaController mangaController = Get.put(MangaController());
+  ScreenshotController screenshotController = ScreenshotController();
 
   @override
   void dispose() {
@@ -141,64 +144,83 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                       ),
-                      Container(
-                        color: const Color(0xFFD2D2D2),
-                        height: (screenWidth > 1080)
-                            ? screenWidth * 0.32 * 1.36
-                            : 1080 * 0.32 * 1.36,
-                        width: (screenWidth > 1080)
-                            ? screenWidth * 0.32
-                            : 1080 * 0.32,
-                        child: GetBuilder<MangaController>(
-                          builder: (_) => GridView.count(
-                            shrinkWrap: true,
-                            crossAxisCount: mangaController.size, //3,
-                            childAspectRatio: 1 / 1.36,
-                            children: List.generate(
-                              mangaController.size * mangaController.size,
-                              (index) {
-                                return DragTarget<String>(
-                                  builder:
-                                      (context, candidateData, rejectedData) {
-                                    return GestureDetector(
-                                      onTap: () {
-                                        if (mangaController.selectedIndex == -1) {
-                                            mangaController.setSelectedIndex(index);
-                                        } else {
-                                          final temp = mangaController.gridImages[index];
+                      Screenshot(
+                        controller: screenshotController,
+                        child: Container(
+                          color: const Color(0xFFD2D2D2),
+                          height: (screenWidth > 1080)
+                              ? screenWidth * 0.32 * 1.36
+                              : 1080 * 0.32 * 1.36,
+                          width: (screenWidth > 1080)
+                              ? screenWidth * 0.32
+                              : 1080 * 0.32,
+                          child: GetBuilder<MangaController>(
+                            builder: (_) => GridView.count(
+                              shrinkWrap: true,
+                              crossAxisCount: mangaController.size, //3,
+                              childAspectRatio: 1 / 1.36,
+                              children: List.generate(
+                                mangaController.size * mangaController.size,
+                                (index) {
+                                  return DragTarget<String>(
+                                    builder:
+                                        (context, candidateData, rejectedData) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          if (mangaController.selectedIndex ==
+                                              -1) {
+                                            mangaController
+                                                .setSelectedIndex(index);
+                                          } else {
+                                            final temp = mangaController
+                                                .gridImages[index];
 
-                                          mangaController.setGridImages(index, mangaController.gridImages[mangaController.selectedIndex]);
-                                          mangaController.setGridImages(mangaController.selectedIndex, temp);
+                                            mangaController.setGridImages(
+                                                index,
+                                                mangaController.gridImages[
+                                                    mangaController
+                                                        .selectedIndex]);
+                                            mangaController.setGridImages(
+                                                mangaController.selectedIndex,
+                                                temp);
 
-                                          mangaController.setSelectedIndex(-1);
-                                        }
-                                      },
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: (mangaController.selectedIndex == index)
-                                                    ? Colors.yellow
-                                                    : Colors.transparent,
-                                                width: 2),
-                                            color: Colors.white),
-                                        margin: const EdgeInsets.all(5.0),
-                                        child: mangaController.gridImages[index] != null
-                                            ? Image.network(
-                                          mangaController.gridImages[index]!,
-                                                fit: BoxFit.fill,
-                                              )
-                                            : const Text(''),
-                                      ),
-                                    );
-                                  },
-                                  onWillAccept: (data) {
-                                    return true;
-                                  },
-                                  onAccept: (data) {
-                                    mangaController.setGridImages(index, data);
-                                  },
-                                );
-                              },
+                                            mangaController
+                                                .setSelectedIndex(-1);
+                                          }
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: (mangaController
+                                                              .selectedIndex ==
+                                                          index)
+                                                      ? Colors.yellow
+                                                      : Colors.transparent,
+                                                  width: 2),
+                                              color: Colors.white),
+                                          margin: const EdgeInsets.all(5.0),
+                                          child: mangaController
+                                                      .gridImages[index] !=
+                                                  null
+                                              ? Image.network(
+                                                  mangaController
+                                                      .gridImages[index]!,
+                                                  fit: BoxFit.fill,
+                                                )
+                                              : const Text(''),
+                                        ),
+                                      );
+                                    },
+                                    onWillAccept: (data) {
+                                      return true;
+                                    },
+                                    onAccept: (data) {
+                                      mangaController.setGridImages(
+                                          index, data);
+                                    },
+                                  );
+                                },
+                              ),
                             ),
                           ),
                         ),
@@ -234,11 +256,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
                                 children: [
-                                  SizeButtonWidget(sizeText: "3x3", mangaController: mangaController,),
-                                  SizeButtonWidget(sizeText: "4x4", mangaController: mangaController,),
+                                  SizeButtonWidget(
+                                    sizeText: "3x3",
+                                    mangaController: mangaController,
+                                  ),
+                                  SizeButtonWidget(
+                                    sizeText: "4x4",
+                                    mangaController: mangaController,
+                                  ),
                                 ],
                               ),
-                            )
+                            ),
+                            Expanded(child: Container()),
+                            CaptureButtonWidget(screenshotController: screenshotController),
                           ],
                         ),
                       ),

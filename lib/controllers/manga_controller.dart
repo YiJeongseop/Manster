@@ -16,7 +16,14 @@ class MangaController extends GetxController{
   void setSize(int index){
     if(_size == index) return;
     _size = index;
-    _gridImages = List.generate(_size * _size, (_) => null);
+    List<String?> temp = _gridImages;
+    _gridImages = List.generate(_size * _size, (int num) {
+      if(num < 9){
+        return temp[num];
+      } else{
+        return null;
+      }
+    });
     update();
   }
 
