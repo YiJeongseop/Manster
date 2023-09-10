@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:jikan_api/jikan_api.dart';
 import 'package:manster/controllers/manga_controller.dart';
 import 'package:manster/controllers/title_search_controller.dart';
 import 'package:manster/widgets/manga_list_widget.dart';
+import 'package:manster/widgets/size_button_widget.dart';
 
 import '../main.dart';
 
@@ -125,14 +125,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                         fontSize: (screenWidth > 1080)
                                             ? screenWidth * 0.012
                                             : 1080 * 0.012,
+                                        color: Colors.black,
                                       ),
                                     )
-                                  : MangaListWidget(mangaList: mangaController.mangaList.value),
+                                  : MangaListWidget(
+                                      mangaList:
+                                          mangaController.mangaList.value),
                             ),
                             const Divider(),
-                            SizedBox(height: (screenWidth > 1080)
-                                ? screenWidth * 0.32 * 0.08
-                                : 1080 * 0.32 * 0.08,)
+                            SizedBox(
+                              height: (screenWidth > 1080)
+                                  ? screenWidth * 0.32 * 0.08
+                                  : 1080 * 0.32 * 0.08,
+                            )
                           ],
                         ),
                       ),
@@ -144,57 +149,58 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: (screenWidth > 1080)
                             ? screenWidth * 0.32
                             : 1080 * 0.32,
-                        child: GridView.count(
-                          shrinkWrap: true,
-                          crossAxisCount: 3,
-                          childAspectRatio: 1 / 1.36,
-                          children: [
-                            Container(
-                              color: Colors.white,
-                              margin: const EdgeInsets.all(8.0),
-                              padding: const EdgeInsets.all(8.0),
+                        child: GetBuilder<MangaController>(
+                          builder: (_) => GridView.count(
+                            shrinkWrap: true,
+                            crossAxisCount: mangaController.size, //3,
+                            childAspectRatio: 1 / 1.36,
+                            children: List.generate(
+                              mangaController.size * mangaController.size,
+                              (index) {
+                                return DragTarget<String>(
+                                  builder:
+                                      (context, candidateData, rejectedData) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        if (mangaController.selectedIndex == -1) {
+                                            mangaController.setSelectedIndex(index);
+                                        } else {
+                                          final temp = mangaController.gridImages[index];
+
+                                          mangaController.setGridImages(index, mangaController.gridImages[mangaController.selectedIndex]);
+                                          mangaController.setGridImages(mangaController.selectedIndex, temp);
+
+                                          mangaController.setSelectedIndex(-1);
+                                        }
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: (mangaController.selectedIndex == index)
+                                                    ? Colors.yellow
+                                                    : Colors.transparent,
+                                                width: 2),
+                                            color: Colors.white),
+                                        margin: const EdgeInsets.all(5.0),
+                                        child: mangaController.gridImages[index] != null
+                                            ? Image.network(
+                                          mangaController.gridImages[index]!,
+                                                fit: BoxFit.fill,
+                                              )
+                                            : const Text(''),
+                                      ),
+                                    );
+                                  },
+                                  onWillAccept: (data) {
+                                    return true;
+                                  },
+                                  onAccept: (data) {
+                                    mangaController.setGridImages(index, data);
+                                  },
+                                );
+                              },
                             ),
-                            Container(
-                              color: Colors.white,
-                              margin: const EdgeInsets.all(8.0),
-                              padding: const EdgeInsets.all(8.0),
-                            ),
-                            Container(
-                              color: Colors.white,
-                              margin: const EdgeInsets.all(8.0),
-                              padding: const EdgeInsets.all(8.0),
-                            ),
-                            Container(
-                              color: Colors.white,
-                              margin: const EdgeInsets.all(8.0),
-                              padding: const EdgeInsets.all(8.0),
-                            ),
-                            Container(
-                              color: Colors.white,
-                              margin: const EdgeInsets.all(8.0),
-                              padding: const EdgeInsets.all(8.0),
-                            ),
-                            Container(
-                              color: Colors.white,
-                              margin: const EdgeInsets.all(8.0),
-                              padding: const EdgeInsets.all(8.0),
-                            ),
-                            Container(
-                              color: Colors.white,
-                              margin: const EdgeInsets.all(8.0),
-                              padding: const EdgeInsets.all(8.0),
-                            ),
-                            Container(
-                              color: Colors.white,
-                              margin: const EdgeInsets.all(8.0),
-                              padding: const EdgeInsets.all(8.0),
-                            ),
-                            Container(
-                              color: Colors.white,
-                              margin: const EdgeInsets.all(8.0),
-                              padding: const EdgeInsets.all(8.0),
-                            ),
-                          ],
+                          ),
                         ),
                       ),
                       Container(
@@ -212,6 +218,28 @@ class _HomeScreenState extends State<HomeScreen> {
                             bottomRight: Radius.circular(50),
                           ),
                           border: Border.all(color: Colors.black, width: 2),
+                        ),
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: (screenWidth > 1080)
+                                  ? EdgeInsets.fromLTRB(
+                                      screenWidth * 0.01,
+                                      screenWidth * 0.03,
+                                      screenWidth * 0.01,
+                                      screenWidth * 0.01)
+                                  : const EdgeInsets.fromLTRB(1080 * 0.01,
+                                      1080 * 0.03, 1080 * 0.01, 1080 * 0.01),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  SizeButtonWidget(sizeText: "3x3", mangaController: mangaController,),
+                                  SizeButtonWidget(sizeText: "4x4", mangaController: mangaController,),
+                                ],
+                              ),
+                            )
+                          ],
                         ),
                       ),
                     ],
