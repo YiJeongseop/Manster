@@ -15,7 +15,7 @@ class IntroController extends GetxController {
             Get.offNamed("/home");
           });
         } else {
-          textProgress.value += 0.035;
+          textProgress.value += 0.07;
         }
       },
     );

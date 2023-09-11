@@ -17,20 +17,31 @@ class _MangaListWidgetState extends State<MangaListWidget> {
     final screenWidth = MediaQuery.of(context).size.width;
     BuiltList<Manga> mangaList = widget.mangaList;
 
-    return Expanded(
-      child: ListView.separated(
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemCount: (mangaList.length > 4) ? 5 : mangaList.length,
-        itemBuilder: (context, index) {
-          return Draggable(
-            data: mangaList[index].imageUrl,
-            feedback: CachedNetworkImage(
+    return ListView.separated(
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      itemCount: (mangaList.length > 4) ? 5 : mangaList.length,
+      itemBuilder: (context, index) {
+        return Draggable(
+          data: mangaList[index].imageUrl,
+          feedback: CachedNetworkImage(
+            imageUrl: mangaList[index].imageUrl,
+            fit: BoxFit.fill,
+            height: (screenWidth > 1080)
+                ? screenWidth * 0.1 * 1.36
+                : 1080 * 0.1 * 1.36,
+            errorWidget: (context, url, error) => const Icon(Icons.error),
+            progressIndicatorBuilder: (context, url, downloadProgress) => Container(
+              decoration: const BoxDecoration(
+                shape: BoxShape.rectangle,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          child: ListTile(
+            title: CachedNetworkImage(
               imageUrl: mangaList[index].imageUrl,
               fit: BoxFit.fill,
-              height: (screenWidth > 1080)
-                  ? screenWidth * 0.1 * 1.36
-                  : 1080 * 0.1 * 1.36,
               errorWidget: (context, url, error) => const Icon(Icons.error),
               progressIndicatorBuilder: (context, url, downloadProgress) => Container(
                 decoration: const BoxDecoration(
@@ -39,22 +50,9 @@ class _MangaListWidgetState extends State<MangaListWidget> {
                 ),
               ),
             ),
-            child: ListTile(
-              title: CachedNetworkImage(
-                imageUrl: mangaList[index].imageUrl,
-                fit: BoxFit.fill,
-                errorWidget: (context, url, error) => const Icon(Icons.error),
-                progressIndicatorBuilder: (context, url, downloadProgress) => Container(
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.rectangle,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          );
-        }, separatorBuilder: (BuildContext context, int index) { return const Divider(); },
-      ),
+          ),
+        );
+      }, separatorBuilder: (BuildContext context, int index) { return const Divider(); },
     );
   }
 }

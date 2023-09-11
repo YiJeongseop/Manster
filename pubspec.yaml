@@ -35,6 +35,7 @@ dependencies:
   jikan_api: ^2.1.0
   cached_network_image: ^3.2.3
   screenshot: ^2.1.0
+  flutter_colorpicker: ^1.0.3
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

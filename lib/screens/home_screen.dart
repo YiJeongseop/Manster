@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:manster/controllers/manga_controller.dart';
@@ -7,6 +10,7 @@ import 'package:manster/widgets/capture_button_widget.dart';
 import 'package:manster/widgets/manga_list_widget.dart';
 import 'package:manster/widgets/size_button_widget.dart';
 import 'package:screenshot/screenshot.dart';
+import 'dart:html' as html;
 
 import '../main.dart';
 
@@ -22,6 +26,8 @@ class _HomeScreenState extends State<HomeScreen> {
       Get.put(TitleSearchController());
   final MangaController mangaController = Get.put(MangaController());
   ScreenshotController screenshotController = ScreenshotController();
+  Color gridViewColor = Color(0xFFD2D2D2);
+  Color pickerColor = Color(0xFFD2D2D2);
 
   @override
   void dispose() {
@@ -117,56 +123,49 @@ class _HomeScreenState extends State<HomeScreen> {
                                         await jikan.searchManga(
                                             query: value, rawQuery: '&sfw');
                                   } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          'Please enter it in a few seconds later.',
-                                          textAlign: TextAlign.center,
-                                          style: GoogleFonts.comingSoon(
-                                            fontSize: (screenWidth > 1080)
-                                                ? screenWidth * 0.013
-                                                : 1080 * 0.013,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                        duration: const Duration(seconds: 2),
-                                      ),
-                                    );
+                                    showSnackbar(context, screenWidth,
+                                        "Please enter it in a few seconds later.");
                                   }
                                   titleSearchController.changeCanSubmit();
                                 },
                               ),
                             ),
                             const Divider(),
-                            Obx(
-                              () => (mangaController.mangaList.value.isEmpty)
-                                  ? Text(
-                                      "No search results found",
-                                      textAlign: TextAlign.center,
-                                      style: GoogleFonts.comingSoon(
-                                        fontSize: (screenWidth > 1080)
-                                            ? screenWidth * 0.012
-                                            : 1080 * 0.012,
-                                        color: Colors.black,
-                                      ),
-                                    )
-                                  : MangaListWidget(
-                                      mangaList:
-                                          mangaController.mangaList.value),
+                            Expanded(
+                              child: Obx(
+                                () => (mangaController.mangaList.value.isEmpty)
+                                    ? Text(
+                                        "No search results found",
+                                        textAlign: TextAlign.center,
+                                        style: GoogleFonts.comingSoon(
+                                          fontSize: (screenWidth > 1080)
+                                              ? screenWidth * 0.012
+                                              : 1080 * 0.012,
+                                          color: Colors.black,
+                                        ),
+                                      )
+                                    : MangaListWidget(
+                                        mangaList:
+                                            mangaController.mangaList.value),
+                              ),
                             ),
                             const Divider(),
-                            SizedBox(
-                              height: (screenWidth > 1080)
-                                  ? screenWidth * 0.31 * 0.08
-                                  : 1080 * 0.31 * 0.08,
-                            )
+                            Text(
+                              "If there are many users, \n it may not be searched.",
+                              style: GoogleFonts.comingSoon(
+                                fontSize: (screenWidth > 1080)
+                                    ? screenWidth * 0.008
+                                    : 1080 * 0.008,
+                                color: Colors.black,
+                              ),
+                            ),
                           ],
                         ),
                       ),
                       Screenshot(
                         controller: screenshotController,
                         child: Container(
-                          color: const Color(0xFFD2D2D2),
+                          color: gridViewColor,
                           height: (screenWidth > 1080)
                               ? screenWidth * 0.31 * 1.36
                               : 1080 * 0.31 * 1.36,
@@ -209,15 +208,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                         },
                                         child: Container(
                                           decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: (mangaController
-                                                              .selectedIndex ==
-                                                          index)
-                                                      ? Colors.yellow
-                                                      : Colors.transparent,
-                                                  width: 2),
+                                              border: (mangaController
+                                                          .selectedIndex ==
+                                                      index)
+                                                  ? Border.all(
+                                                      color: Colors.yellow,
+                                                      width: 2)
+                                                  : null,
                                               color: Colors.white),
-                                          margin: const EdgeInsets.all(2.5),
+                                          margin: const EdgeInsets.all(5),
                                           child: mangaController
                                                       .gridImages[index] !=
                                                   null
@@ -263,6 +262,42 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            Padding(
+                              padding: (screenWidth > 1080)
+                                  ? EdgeInsets.fromLTRB(
+                                      screenWidth * 0.01,
+                                      screenWidth * 0.05,
+                                      screenWidth * 0.01,
+                                      screenWidth * 0.01)
+                                  : const EdgeInsets.fromLTRB(1080 * 0.01,
+                                      1080 * 0.05, 1080 * 0.01, 1080 * 0.01),
+                              child: TextButton(
+                                onPressed: () {
+                                  colorDialog(context, screenWidth);
+                                },
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all(Colors.grey),
+                                  side: MaterialStateProperty.all(
+                                    const BorderSide(
+                                      color: Colors.black45, // Border color
+                                      width: 2.0, // Border width
+                                    ),
+                                  ),
+                                ),
+                                child: Text(
+                                  "Change Color",
+                                  style: GoogleFonts.comingSoon(
+                                    fontSize: (screenWidth > 1080)
+                                        ? screenWidth * 0.012
+                                        : 1080 * 0.012,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(child: Container()),
                             Container(
                               child: SizeButtonWidget(
                                 sizeText: "2x2",
@@ -272,16 +307,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             SizedBox(
                               height: (screenWidth > 1080)
                                   ? screenWidth * 0.31 * 0.04
-                                  : 1080 * 0.31 * 0.04,),
+                                  : 1080 * 0.31 * 0.04,
+                            ),
                             Container(
-                              // padding: (screenWidth > 1080)
-                              //     ? EdgeInsets.fromLTRB(
-                              //         screenWidth * 0.01,
-                              //         screenWidth * 0.03,
-                              //         screenWidth * 0.01,
-                              //         screenWidth * 0.01)
-                              //     : const EdgeInsets.fromLTRB(1080 * 0.01,
-                              //         1080 * 0.03, 1080 * 0.01, 1080 * 0.01),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
@@ -300,9 +328,58 @@ class _HomeScreenState extends State<HomeScreen> {
                             SizedBox(
                               height: (screenWidth > 1080)
                                   ? screenWidth * 0.31 * 0.04
-                                  : 1080 * 0.31 * 0.04,),
+                                  : 1080 * 0.31 * 0.04,
+                            ),
                             CaptureButtonWidget(
                                 screenshotController: screenshotController),
+                            Expanded(child: Container()),
+                            Padding(
+                              padding: (screenWidth > 1080)
+                                  ? EdgeInsets.fromLTRB(
+                                      screenWidth * 0.01,
+                                      screenWidth * 0.015,
+                                      screenWidth * 0.01,
+                                      screenWidth * 0.05)
+                                  : const EdgeInsets.fromLTRB(1080 * 0.01,
+                                      1080 * 0.015, 1080 * 0.01, 1080 * 0.05),
+                              child: TextButton(
+                                onPressed: () {
+                                  html.window.open(
+                                      'https://twitter.com/YiJeongseop',
+                                      "Developer's Twitter");
+                                },
+                                style: ButtonStyle(
+                                  side: MaterialStateProperty.all(
+                                    const BorderSide(
+                                      color: Colors.grey, // Border color
+                                      width: 2.0, // Border width
+                                    ),
+                                  ),
+                                  backgroundColor:
+                                      MaterialStateProperty.resolveWith(
+                                    (states) {
+                                      if (states
+                                          .contains(MaterialState.pressed)) {
+                                        return Colors.grey.withOpacity(0.5);
+                                      } else if (states
+                                          .contains(MaterialState.hovered)) {
+                                        return Colors.grey.withOpacity(0.2);
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                ),
+                                child: Text(
+                                  "Developer's Twitter",
+                                  style: GoogleFonts.comingSoon(
+                                    fontSize: (screenWidth > 1080)
+                                        ? screenWidth * 0.008
+                                        : 1080 * 0.008,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -328,6 +405,76 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  void changeColor(Color color) {
+    setState(() => pickerColor = color);
+  }
+
+  void colorDialog(BuildContext context, double screenWidth) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return Center(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Align(
+                alignment: Alignment.center,
+                child: AlertDialog(
+                  title: Text(
+                    'Pick a color!',
+                    style: GoogleFonts.comingSoon(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  content: ColorPicker(
+                    pickerColor: pickerColor,
+                    onColorChanged: changeColor,
+                  ),
+                  actions: [
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          gridViewColor = pickerColor;
+                          Get.back();
+                        });
+                      },
+                      child: Text(
+                        'Got it',
+                        style: GoogleFonts.comingSoon(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void showSnackbar(BuildContext context, double screenWidth, String text) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          "$text",
+          textAlign: TextAlign.center,
+          style: GoogleFonts.comingSoon(
+            fontSize: (screenWidth > 1080) ? screenWidth * 0.013 : 1080 * 0.013,
+            color: Colors.white,
+          ),
+        ),
+        duration: const Duration(seconds: 2),
       ),
     );
   }
