@@ -21,8 +21,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final jikan = Jikan();
-  final TitleSearchController titleSearchController =
-      Get.put(TitleSearchController());
+  final TitleSearchController titleSearchController = Get.put(TitleSearchController());
   final MangaController mangaController = Get.put(MangaController());
   ScreenshotController screenshotController = ScreenshotController();
   Color gridViewColor = const Color(0xFFD2D2D2);
@@ -43,9 +42,9 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.white,
         body: Center(
           child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
+            scrollDirection: Axis.vertical,
             child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
+              scrollDirection: Axis.horizontal,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -102,8 +101,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 textAlignVertical: TextAlignVertical.bottom,
                                 decoration: const InputDecoration(
                                   hintText: 'Enter a title',
-                                  prefixIcon: Icon(Icons.search),
                                   border: OutlineInputBorder(),
+                                  isDense: true,     // Added this
+                                  contentPadding: EdgeInsets.all(8),
                                 ),
                                 onChanged: (value) => titleSearchController
                                     .updateSearchText(value),
@@ -148,6 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 color: Colors.black,
                               ),
                             ),
+                            const SizedBox(height: 5,)
                           ],
                         ),
                       ),
@@ -187,7 +188,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   ? Border.all(color: Colors.yellow, width: 2)
                                                   : null,
                                               color: Colors.white),
-                                          margin: const EdgeInsets.all(5),
+                                          margin: const EdgeInsets.all(4),
                                           child: mangaController.gridImages[index] != null
                                               ? Image.network(mangaController.gridImages[index]!, fit: BoxFit.fill,)
                                               : const Text(''),
@@ -236,7 +237,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       1080 * 0.05, 1080 * 0.01, 1080 * 0.01),
                               child: TextButton(
                                 onPressed: () {
-                                  colorDialog(context, screenWidth);
+                                  colorDialog(context);
                                 },
                                 style: ButtonStyle(
                                   backgroundColor:
@@ -290,41 +291,27 @@ class _HomeScreenState extends State<HomeScreen> {
                                   : 1080 * 0.31 * 0.04,
                             ),
                             CaptureButtonWidget(screenshotController: screenshotController),
+                            SizedBox(height: (screenWidth > 1080)
+                                ? screenWidth * 0.04
+                                : 1080 * 0.04,),
                             Expanded(child: Container()),
-                            Padding(
-                              padding: (screenWidth > 1080)
-                                  ? EdgeInsets.fromLTRB(
-                                      screenWidth * 0.01,
-                                      screenWidth * 0.015,
-                                      screenWidth * 0.01,
-                                      screenWidth * 0.05)
-                                  : const EdgeInsets.fromLTRB(1080 * 0.01,
-                                      1080 * 0.015, 1080 * 0.01, 1080 * 0.05),
-                              child: TextButton(
-                                onPressed: () {
-                                  html.window.open(
-                                      'https://twitter.com/YiJeongseop',
-                                      "Developer's Twitter");
-                                },
-                                style: ButtonStyle(
-                                  side: MaterialStateProperty.all(
-                                    const BorderSide(
-                                      color: Colors.grey, // Border color
-                                      width: 2.0, // Border width
-                                    ),
-                                  ),
-                                  backgroundColor:
-                                      MaterialStateProperty.resolveWith(
-                                    (states) {
-                                      if (states.contains(MaterialState.pressed)) {
-                                        return Colors.grey.withOpacity(0.5);
-                                      } else if (states.contains(MaterialState.hovered)) {
-                                        return Colors.grey.withOpacity(0.2);
-                                      }
-                                      return null;
-                                    },
-                                  ),
-                                ),
+                            const Divider(),
+                            Text(
+                              "Please use a PC for capture!",
+                              style: GoogleFonts.comingSoon(
+                                fontSize: (screenWidth > 1080)
+                                    ? screenWidth * 0.008
+                                    : 1080 * 0.008,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                    html.window.open(
+                                        'https://twitter.com/YiJeongseop',
+                                        "Twitter");
+                              },
                                 child: Text(
                                   "Developer's Twitter",
                                   style: GoogleFonts.comingSoon(
@@ -334,24 +321,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                     color: Colors.black,
                                   ),
                                 ),
-                              ),
                             ),
+                            const SizedBox(height: 5,),
                           ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Create your favorite manga collection!",
-                        style: GoogleFonts.comingSoon(
-                          fontSize: (screenWidth > 1080)
-                              ? screenWidth * 0.01
-                              : 1080 * 0.01,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ],
@@ -369,7 +341,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() => pickerColor = color);
   }
 
-  void colorDialog(BuildContext context, double screenWidth) {
+  void colorDialog(BuildContext context) {
     showDialog(
       context: context,
       barrierDismissible: true,

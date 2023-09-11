@@ -3,9 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:manster/controllers/manga_controller.dart';
 
 class SizeButtonWidget extends StatefulWidget {
-  const SizeButtonWidget(
-      {Key? key, required this.sizeText, required this.mangaController})
-      : super(key: key);
+  const SizeButtonWidget({Key? key, required this.sizeText, required this.mangaController}) : super(key: key);
 
   final String sizeText;
   final MangaController mangaController;
@@ -25,7 +23,9 @@ class _SizeButtonWidgetState extends State<SizeButtonWidget> {
       onPressed: () {
         (sizeText == "4x4")
             ? mangaController.setSize(4)
-            : ((sizeText == "3x3") ? mangaController.setSize(3) : mangaController.setSize(2));
+            : ((sizeText == "3x3")
+                ? mangaController.setSize(3)
+                : mangaController.setSize(2));
       },
       style: ButtonStyle(
         side: MaterialStateProperty.all(
