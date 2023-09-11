@@ -61,12 +61,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 : 1080 * 0.03,
                             fontWeight: FontWeight.w600),
                       ),
-                      Image.asset(
-                        'assets/images/rest.png',
-                        height: (screenWidth > 1080)
-                            ? screenWidth * 0.02
-                            : 1080 * 0.02,
-                      ),
                     ],
                   ),
                   Row(

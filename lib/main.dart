@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'screens/intro_screen.dart';
 import 'screens/home_screen.dart';
 
 void main() {
@@ -18,8 +17,7 @@ class MyApp extends StatelessWidget {
       title: 'Manster',
       initialRoute: '/',
       getPages: [
-        GetPage(name: '/', page: () => const IntroScreen()),
-        GetPage(name: '/home', page: () => const HomeScreen(), transition: Transition.downToUp)
+        GetPage(name: '/', page: () => const HomeScreen()),
       ],
     );
   }
