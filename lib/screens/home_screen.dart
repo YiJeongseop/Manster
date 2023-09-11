@@ -1,18 +1,16 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:jikan_api/jikan_api.dart';
+import 'package:screenshot/screenshot.dart';
+import 'dart:html' as html;
+
 import 'package:manster/controllers/manga_controller.dart';
 import 'package:manster/controllers/title_search_controller.dart';
 import 'package:manster/widgets/capture_button_widget.dart';
 import 'package:manster/widgets/manga_list_widget.dart';
 import 'package:manster/widgets/size_button_widget.dart';
-import 'package:screenshot/screenshot.dart';
-import 'dart:html' as html;
-
-import '../main.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -22,12 +20,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final jikan = Jikan();
   final TitleSearchController titleSearchController =
       Get.put(TitleSearchController());
   final MangaController mangaController = Get.put(MangaController());
   ScreenshotController screenshotController = ScreenshotController();
-  Color gridViewColor = Color(0xFFD2D2D2);
-  Color pickerColor = Color(0xFFD2D2D2);
+  Color gridViewColor = const Color(0xFFD2D2D2);
+  Color pickerColor = const Color(0xFFD2D2D2);
 
   @override
   void dispose() {
@@ -80,7 +79,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: (screenWidth > 1080)
                             ? screenWidth * 0.15
                             : 1080 * 0.15,
-                        margin: const EdgeInsets.all(8.0),
                         decoration: BoxDecoration(
                           color: const Color(0xFFD2D2D2),
                           borderRadius: const BorderRadius.only(
@@ -119,12 +117,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 // Enter key event
                                 onSubmitted: (value) async {
                                   if (titleSearchController.canSubmit) {
-                                    mangaController.mangaList.value =
-                                        await jikan.searchManga(
-                                            query: value, rawQuery: '&sfw');
+                                    mangaController.mangaList.value = await jikan.searchManga(query: value, rawQuery: '&sfw');
                                   } else {
-                                    showSnackbar(context, screenWidth,
-                                        "Please enter it in a few seconds later.");
+                                    showSnackbar(context, screenWidth, "Please enter it in a few seconds later.");
                                   }
                                   titleSearchController.changeCanSubmit();
                                 },
@@ -178,53 +173,29 @@ class _HomeScreenState extends State<HomeScreen> {
                               crossAxisCount: mangaController.size,
                               childAspectRatio: 1 / 1.36,
                               children: List.generate(
-                                mangaController.size * mangaController.size,
-                                (index) {
+                                mangaController.size * mangaController.size, (index) {
                                   return DragTarget<String>(
-                                    builder:
-                                        (context, candidateData, rejectedData) {
+                                    builder: (context, candidateData, rejectedData) {
                                       return GestureDetector(
                                         onTap: () {
-                                          if (mangaController.selectedIndex ==
-                                              -1) {
-                                            mangaController
-                                                .setSelectedIndex(index);
+                                          if (mangaController.selectedIndex == -1) {
+                                            mangaController.setSelectedIndex(index);
                                           } else {
-                                            final temp = mangaController
-                                                .gridImages[index];
-
-                                            mangaController.setGridImages(
-                                                index,
-                                                mangaController.gridImages[
-                                                    mangaController
-                                                        .selectedIndex]);
-                                            mangaController.setGridImages(
-                                                mangaController.selectedIndex,
-                                                temp);
-
-                                            mangaController
-                                                .setSelectedIndex(-1);
+                                            final temp = mangaController.gridImages[index];
+                                            mangaController.setGridImages(index, mangaController.gridImages[mangaController.selectedIndex]);
+                                            mangaController.setGridImages(mangaController.selectedIndex, temp);
+                                            mangaController.setSelectedIndex(-1);
                                           }
                                         },
                                         child: Container(
                                           decoration: BoxDecoration(
-                                              border: (mangaController
-                                                          .selectedIndex ==
-                                                      index)
-                                                  ? Border.all(
-                                                      color: Colors.yellow,
-                                                      width: 2)
+                                              border: (mangaController.selectedIndex == index)
+                                                  ? Border.all(color: Colors.yellow, width: 2)
                                                   : null,
                                               color: Colors.white),
                                           margin: const EdgeInsets.all(5),
-                                          child: mangaController
-                                                      .gridImages[index] !=
-                                                  null
-                                              ? Image.network(
-                                                  mangaController
-                                                      .gridImages[index]!,
-                                                  fit: BoxFit.fill,
-                                                )
+                                          child: mangaController.gridImages[index] != null
+                                              ? Image.network(mangaController.gridImages[index]!, fit: BoxFit.fill,)
                                               : const Text(''),
                                         ),
                                       );
@@ -233,8 +204,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       return true;
                                     },
                                     onAccept: (data) {
-                                      mangaController.setGridImages(
-                                          index, data);
+                                      mangaController.setGridImages(index, data);
                                     },
                                   );
                                 },
@@ -250,7 +220,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: (screenWidth > 1080)
                             ? screenWidth * 0.15
                             : 1080 * 0.15,
-                        margin: const EdgeInsets.all(8.0),
                         decoration: BoxDecoration(
                           color: const Color(0xFFD2D2D2),
                           borderRadius: const BorderRadius.only(
@@ -298,40 +267,35 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             Expanded(child: Container()),
-                            Container(
-                              child: SizeButtonWidget(
-                                sizeText: "2x2",
-                                mangaController: mangaController,
-                              ),
+                            SizeButtonWidget(
+                              sizeText: "2x2",
+                              mangaController: mangaController,
                             ),
                             SizedBox(
                               height: (screenWidth > 1080)
                                   ? screenWidth * 0.31 * 0.04
                                   : 1080 * 0.31 * 0.04,
                             ),
-                            Container(
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  SizeButtonWidget(
-                                    sizeText: "3x3",
-                                    mangaController: mangaController,
-                                  ),
-                                  SizeButtonWidget(
-                                    sizeText: "4x4",
-                                    mangaController: mangaController,
-                                  ),
-                                ],
-                              ),
+                            Row(
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceAround,
+                              children: [
+                                SizeButtonWidget(
+                                  sizeText: "3x3",
+                                  mangaController: mangaController,
+                                ),
+                                SizeButtonWidget(
+                                  sizeText: "4x4",
+                                  mangaController: mangaController,
+                                ),
+                              ],
                             ),
                             SizedBox(
                               height: (screenWidth > 1080)
                                   ? screenWidth * 0.31 * 0.04
                                   : 1080 * 0.31 * 0.04,
                             ),
-                            CaptureButtonWidget(
-                                screenshotController: screenshotController),
+                            CaptureButtonWidget(screenshotController: screenshotController),
                             Expanded(child: Container()),
                             Padding(
                               padding: (screenWidth > 1080)
@@ -358,11 +322,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   backgroundColor:
                                       MaterialStateProperty.resolveWith(
                                     (states) {
-                                      if (states
-                                          .contains(MaterialState.pressed)) {
+                                      if (states.contains(MaterialState.pressed)) {
                                         return Colors.grey.withOpacity(0.5);
-                                      } else if (states
-                                          .contains(MaterialState.hovered)) {
+                                      } else if (states.contains(MaterialState.hovered)) {
                                         return Colors.grey.withOpacity(0.2);
                                       }
                                       return null;
@@ -467,7 +429,7 @@ class _HomeScreenState extends State<HomeScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          "$text",
+          text,
           textAlign: TextAlign.center,
           style: GoogleFonts.comingSoon(
             fontSize: (screenWidth > 1080) ? screenWidth * 0.013 : 1080 * 0.013,

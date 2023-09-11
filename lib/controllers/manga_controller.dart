@@ -5,15 +5,12 @@ class MangaController extends GetxController {
   Rx<BuiltList<Manga>> mangaList = BuiltList<Manga>([]).obs;
 
   int _size = 3;
-
   get size => _size;
 
   int _selectedIndex = -1;
-
   get selectedIndex => _selectedIndex;
 
   List<String?> _gridImages = List.generate(9, (_) => null);
-
   get gridImages => _gridImages;
 
   void setSize(int size) {

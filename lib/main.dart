@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jikan_api/jikan_api.dart';
 
 import 'screens/intro_screen.dart';
 import 'screens/home_screen.dart';
-
-final jikan = Jikan();
 
 void main() {
   runApp(const MyApp());
