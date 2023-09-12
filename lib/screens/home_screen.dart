@@ -1,16 +1,17 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jikan_api/jikan_api.dart';
 import 'package:screenshot/screenshot.dart';
-import 'dart:html' as html;
 
-import 'package:manster/controllers/manga_controller.dart';
-import 'package:manster/controllers/title_search_controller.dart';
-import 'package:manster/widgets/capture_button_widget.dart';
-import 'package:manster/widgets/manga_list_widget.dart';
-import 'package:manster/widgets/size_button_widget.dart';
+import '../controllers/manga_controller.dart';
+import '../controllers/title_search_controller.dart';
+import '../widgets/capture_button_widget.dart';
+import '../widgets/manga_list_widget.dart';
+import '../widgets/size_button_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -102,13 +103,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                 decoration: const InputDecoration(
                                   hintText: 'Enter a title',
                                   border: OutlineInputBorder(),
-                                  isDense: true,     // Added this
+                                  isDense: true,
                                   contentPadding: EdgeInsets.all(8),
                                 ),
-                                onChanged: (value) => titleSearchController
-                                    .updateSearchText(value),
+                                onChanged: (value) => titleSearchController.updateSearchText(value),
                                 textInputAction: TextInputAction.go,
-                                // Enter key event
                                 onSubmitted: (value) async {
                                   if (titleSearchController.canSubmit) {
                                     mangaController.mangaList.value = await jikan.searchManga(query: value, rawQuery: '&sfw');
@@ -133,9 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           color: Colors.black,
                                         ),
                                       )
-                                    : MangaListWidget(
-                                        mangaList:
-                                            mangaController.mangaList.value),
+                                    : MangaListWidget(mangaList: mangaController.mangaList.value),
                               ),
                             ),
                             const Divider(),
@@ -240,8 +237,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   colorDialog(context);
                                 },
                                 style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all(Colors.grey),
+                                  backgroundColor: MaterialStateProperty.all(Colors.grey),
                                   side: MaterialStateProperty.all(
                                     const BorderSide(
                                       color: Colors.black45, // Border color
@@ -272,8 +268,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   : 1080 * 0.31 * 0.04,
                             ),
                             Row(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceAround,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 SizeButtonWidget(
                                   sizeText: "3x3",
@@ -308,19 +303,17 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                    html.window.open(
-                                        'https://twitter.com/YiJeongseop',
-                                        "Twitter");
+                                window.open('https://twitter.com/YiJeongseop', "Twitter");
                               },
-                                child: Text(
-                                  "Developer's Twitter",
-                                  style: GoogleFonts.comingSoon(
-                                    fontSize: (screenWidth > 1080)
-                                        ? screenWidth * 0.008
-                                        : 1080 * 0.008,
-                                    color: Colors.black,
-                                  ),
+                              child: Text(
+                                "Developer's Twitter",
+                                style: GoogleFonts.comingSoon(
+                                  fontSize: (screenWidth > 1080)
+                                      ? screenWidth * 0.008
+                                      : 1080 * 0.008,
+                                  color: Colors.black,
                                 ),
+                              ),
                             ),
                             const SizedBox(height: 5,),
                           ],
@@ -335,10 +328,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
-  }
-
-  void changeColor(Color color) {
-    setState(() => pickerColor = color);
   }
 
   void colorDialog(BuildContext context) {
@@ -363,7 +352,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   content: ColorPicker(
                     pickerColor: pickerColor,
-                    onColorChanged: changeColor,
+                    onColorChanged: (Color color) => setState(() {
+                          pickerColor = color;
+                    }),
                   ),
                   actions: [
                     ElevatedButton(

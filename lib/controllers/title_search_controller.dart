@@ -14,7 +14,7 @@ class TitleSearchController extends GetxController {
   void changeCanSubmit() {
     if (_canSubmit) {
       _canSubmit = false;
-      Timer(const Duration(seconds: 4), () {
+      Timer(const Duration(seconds: 3), () {
         _canSubmit = true;
       });
     }
