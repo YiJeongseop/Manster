@@ -14,3 +14,5 @@ It's a website that makes a list of favorite manga. I used the [Jikan API](https
 
 ## License
 This project is licensed under the _MIT licence_ - see the [LICENSE](LICENSE) file for details.
+
+![Animation](https://github.com/YiJeongseop/Manster/assets/112690335/91fa1ece-78e5-48cd-9225-41749d06a992)
