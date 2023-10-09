@@ -1,5 +1,7 @@
 # Manster
-It's a website that makes a list of favorite manga. I used the [Jikan API](https://jikan.moe/) to get manga images.
+This web app helps you create a list of your favorite mangas. 
+
+I used the [Jikan API](https://jikan.moe/) to get manga images.
 
 ## GIF
 ![Animation2](https://github.com/YiJeongseop/Manster/assets/112690335/c6d436a9-22f4-43b9-bd1b-86afbd9cf5ef)
